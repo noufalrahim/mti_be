@@ -5,12 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.tinysteps.tinysteps.model.ChildModel;
 import com.tinysteps.tinysteps.service.ChildService;
@@ -19,7 +14,6 @@ import com.tinysteps.tinysteps.service.ChildService;
 @RequestMapping("/api/child")
 public class ChildController {
 
-    // private static final Logger logger = LoggerFactory.getLogger(ChildController.class);
     @Autowired
     private ChildService childService;
 
@@ -29,13 +23,27 @@ public class ChildController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<Map<String, Object>> getMethodName(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> getChildrenByUser(@PathVariable Long id) {
         return childService.getAllChildrenOfUser(id);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getChildById(@PathVariable Long id) {
+        return childService.getChildById(id);
     }
 
     @PostMapping("/add")
     public ResponseEntity<Map<String, Object>> addChild(@RequestBody ChildModel child) {
-        // logger.info("Child received: {}", child);
         return childService.addChild(child);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateChild(@PathVariable Long id, @RequestBody ChildModel child) {
+        return childService.updateChild(id, child);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, Object>> deleteChild(@PathVariable Long id) {
+        return childService.deleteChild(id);
     }
 }

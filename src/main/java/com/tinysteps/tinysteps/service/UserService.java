@@ -1,9 +1,6 @@
 package com.tinysteps.tinysteps.service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,13 +44,38 @@ public class UserService {
         return ResponseEntity.ok(users);
     }
 
+    public ResponseEntity<Map<String, Object>> editUser(Long id, UserModel updatedUser) {
+        Optional<UserModel> existingUser = userRepository.findById(id);
+        if (existingUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User not found", "data", Collections.emptyMap()));
+        }
+
+        UserModel user = existingUser.get();
+        user.setPhone(updatedUser.getPhone());
+        userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of("message", "User updated successfully", "data", user));
+    }
+
+    public ResponseEntity<Map<String, Object>> deleteUser(Long id) {
+        Optional<UserModel> existingUser = userRepository.findById(id);
+        if (existingUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "User not found", "data", Collections.emptyMap()));
+        }
+
+        userRepository.deleteById(id);
+        return ResponseEntity.ok(Map.of("message", "User deleted successfully", "data", Collections.emptyMap()));
+    }
+
     public ResponseEntity<Map<String, Object>> getDefaultChild(Long userId) {
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Invalid user", "data", Collections.emptyMap()));
         }
-        Optional<UserModel> existingUser = userRepository.findById(userId);
 
+        Optional<UserModel> existingUser = userRepository.findById(userId);
         if (existingUser.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("message", "Invalid user", "data", Collections.emptyMap()));

@@ -14,9 +14,6 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    @Autowired
-    CategoryModel newCategory;
-
     public CategoryService(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
@@ -31,6 +28,7 @@ public class CategoryService {
             return "Category already exists!";
         }
 
+        CategoryModel newCategory = new CategoryModel();
         newCategory.setName(name);
         categoryRepository.save(newCategory);
 
@@ -40,14 +38,12 @@ public class CategoryService {
     public String editCategory(CategoryModel categoryModel) {
         Long id = categoryModel.getId();
         Optional<CategoryModel> existingCategory = categoryRepository.findById(id);
-        System.out.print(existingCategory);
 
         if (!existingCategory.isPresent()) {
             return "No category exists with the given ID!";
         }
 
         categoryRepository.save(categoryModel);
-
         return "Category updated successfully!";
     }
 
@@ -61,5 +57,4 @@ public class CategoryService {
         categoryRepository.deleteById(id);
         return "Category deleted successfully!";
     }
-
 }

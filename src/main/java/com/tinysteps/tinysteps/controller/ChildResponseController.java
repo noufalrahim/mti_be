@@ -5,39 +5,41 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.tinysteps.tinysteps.model.ChildResponseModel;
 import com.tinysteps.tinysteps.service.ChildResponseService;
-
-
 
 @RestController
 @RequestMapping("/api/childresponses")
 public class ChildResponseController {
 
     @Autowired
-    private ChildResponseService childresponseService;
+    private ChildResponseService childResponseService;
 
     @GetMapping("")
-    public List<ChildResponseModel> getAllChildResponse() {
-        return childresponseService.getAllChildResponse();
-    }
-
-    @PostMapping("/add")
-    public ResponseEntity<Map<String, Object>> addChildResponse(@RequestBody ChildResponseModel childResponseModel) {
-        return childresponseService.addChildResponse(childResponseModel);
+    public List<ChildResponseModel> getAllChildResponses() {
+        return childResponseService.getAllChildResponse();
     }
 
     @GetMapping("/{childId}")
     public ResponseEntity<Map<String, Object>> getChildProgress(@PathVariable Long childId) {
-        return childresponseService.getChildProgress(childId);
+        return childResponseService.getChildProgress(childId);
     }
-    
-    
+
+    @PostMapping("/add")
+    public ResponseEntity<Map<String, Object>> addChildResponse(@RequestBody ChildResponseModel childResponseModel) {
+        return childResponseService.addChildResponse(childResponseModel);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateChildResponse(@PathVariable Long id,
+                                                                   @RequestBody ChildResponseModel childResponseModel) {
+        return childResponseService.updateChildResponse(id, childResponseModel);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Map<String, Object>> deleteChildResponse(@PathVariable Long id) {
+        return childResponseService.deleteChildResponse(id);
+    }
 }

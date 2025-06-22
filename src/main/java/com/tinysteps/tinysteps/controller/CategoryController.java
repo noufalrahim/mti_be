@@ -32,7 +32,7 @@ public class CategoryController {
         return CategoryService.addCategory(categoryModel.getName());
     }
 
-    @PutMapping("edit/{id}")
+    @PutMapping("update/{id}")
     public String editCategory(@RequestBody CategoryModel categoryModel) {
         return CategoryService.editCategory(categoryModel);
     }

@@ -150,4 +150,34 @@ public class ChildResponseService {
         return ResponseEntity.ok(Map.of("message", "Child progress retrieved successfully", "data", formattedData));
     }
 
+    public ResponseEntity<Map<String, Object>> updateChildResponse(Long id, ChildResponseModel updatedModel) {
+        Optional<ChildResponseModel> responseOpt = childResponseRepository.findById(id);
+        if (responseOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Child response not found", "data", Collections.emptyMap()));
+        }
+    
+        ChildResponseModel existing = responseOpt.get();
+        if (updatedModel.getAnsweredYes() != null)
+            existing.setAnsweredYes(updatedModel.getAnsweredYes());
+        if (updatedModel.getQuestionAnswered() != null)
+            existing.setQuestionAnswered(updatedModel.getQuestionAnswered());
+    
+        childResponseRepository.save(existing);
+    
+        return ResponseEntity.ok(Map.of("message", "Child response updated successfully", "data", existing));
+    }
+    
+    public ResponseEntity<Map<String, Object>> deleteChildResponse(Long id) {
+        Optional<ChildResponseModel> responseOpt = childResponseRepository.findById(id);
+        if (responseOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Child response not found", "data", Collections.emptyMap()));
+        }
+    
+        childResponseRepository.deleteById(id);
+        return ResponseEntity.ok(Map.of("message", "Child response deleted successfully", "data", Collections.emptyMap()));
+    }
+    
+
 }
